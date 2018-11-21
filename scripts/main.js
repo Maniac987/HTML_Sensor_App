@@ -20,15 +20,18 @@ function init() {
 
     sensor_list_html = document.getElementsByClassName('sensor_list_html')[0];
     sensor_output = document.getElementsByClassName('sensor_output')[0];
-    getAccelerometerSensor();
-    getLineareAccelerometerSensor();
-    getGyroscopSensor();
     getBattery();
     getLocationSensor();
-    getLightSensor();
+    getWifiSensor();
+    getCamera();
+    getAccelerometerSensor();
     getMagnetSensor();
+    getGyroscopSensor();
     getProximitySensor();
-    getWifiSensor()
+    getLightSensor();
+    getGravtitationSensor();
+    getLineareAccelerometerSensor();
+    getRotationVector();
 
     setInterval(() => {
         getSensorData = true;
@@ -40,6 +43,18 @@ function init() {
 
 
 }
+
+function getRotationVector(){
+    createSensorListItem('Drehvektor', false, null);
+}
+
+function getGravtitationSensor(){
+    createSensorListItem('Gravitationssensor', false, null);
+}
+
+function getCamera() {
+    createSensorListItem('Kamera', true, null);
+};
 
 function lineareAccelerometerChange() {
     //console.log("getAccelerometerSensor");
@@ -207,7 +222,9 @@ function getLightSensor() {
     //const details = document.getElementById("sensor_name");
 
     if (window.AmbientLightSensor) {
-        lightSensor = new AmbientLightSensor();
+
+        lightSensor = new AmbientLightSensor({ frequency: 1 });
+
         createSensorListItem('Licht', true, lightClickListener.bind(this));
     } else {
         createSensorListItem('Licht', false, null);
@@ -238,7 +255,9 @@ function magnetometerClickListener() {
 
 function getMagnetSensor() {
     if (window.Magnetometer) {
-        magSensor = new Magnetometer();
+
+        magSensor = new Magnetometer({ frequency: 1 });
+
         createSensorListItem('Magnetometer', true, magnetometerClickListener.bind(this));
     } else {
         createSensorListItem('Magnetometer', false, null);
@@ -255,9 +274,9 @@ function getProximitySensor() {
 
 function getWifiSensor() {
     if (navigator.connection) {
-        createSensorListItem('Netzwerk', true, wifiClickListener.bind(this));
+        createSensorListItem('WIFI', true, wifiClickListener.bind(this));
     } else {
-        createSensorListItem('Netzwerk', false, null);
+        createSensorListItem('WIFI', false, null);
     }
 }
 
