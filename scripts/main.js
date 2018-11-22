@@ -14,6 +14,7 @@ var sensorData = {
 
 var lightSensor;
 var magSensor;
+var gelocationWatchId;
 
 function init() {
     console.log(window);
@@ -44,11 +45,11 @@ function init() {
 
 }
 
-function getRotationVector(){
+function getRotationVector() {
     createSensorListItem('Drehvektor', false, null);
 }
 
-function getGravtitationSensor(){
+function getGravtitationSensor() {
     createSensorListItem('Gravitationssensor', false, null);
 }
 
@@ -74,6 +75,7 @@ function lineareAccelerometerChange() {
 
 
 function lineareAccelerometerClickListener() {
+    navigator.geolocation.clearWatch(gelocationWatchId);
     if (lightSensor)
         lightSensor.stop();;
     window.removeEventListener('devicemotion', getGPSLocation, false);
@@ -111,6 +113,7 @@ function batteryChange() {
 }
 
 function batteryClickListener() {
+    navigator.geolocation.clearWatch(gelocationWatchId);
     if (lightSensor)
         lightSensor.stop();;
     window.removeEventListener('devicemotion', getGPSLocation, false);
@@ -127,27 +130,32 @@ function getBattery() {
     }
 }
 
-function getGPSLocation() {
-    navigator.geolocation.getCurrentPosition(getLocation);
-    function getLocation(position) {
-        console.log(position);
-        sensorData.name = 'Location';
-        sensorData.xField = 'Latitude: ';
-        sensorData.yField = 'Longitude: ';
-        sensorData.zField = 'altitude: ';
-        sensorData.x = position.coords.latitude;
-        sensorData.y = position.coords.longitude;
-        sensorData.z = position.coords.altitude;
+function getGPSLocation(position) {
+    console.log(position);
+    sensorData.name = 'Location';
+    sensorData.xField = 'Latitude: ';
+    sensorData.yField = 'Longitude: ';
+    sensorData.zField = 'altitude: ';
+    sensorData.x = position.coords.latitude;
+    sensorData.y = position.coords.longitude;
+    sensorData.z = position.coords.altitude;
 
-    }
+
 }
 
 function loactionChange() {
-
+    // TODO umschrieben auf seperaten timer 
     window.addEventListener('devicemotion', getGPSLocation, false);
-
+    var options = {
+        enableHighAccuracy: false,
+        timeout: 5000,
+        maximumAge: 0
+      };
+    gelocationWatchId = navigator.geolocation.watchPosition(getGPSLocation, null, options);
+    
 }
 function loactionClickListener() {
+    navigator.geolocation.clearWatch(gelocationWatchId);
     if (lightSensor)
         lightSensor.stop();;
     loactionChange();
@@ -175,6 +183,7 @@ function getGyroscopSensorData(eventData) {
     sensorData.z = eventData.rotationRate.alpha.toFixed(2) + ' rad/s';;
 }
 function gyroscopChange() {
+    navigator.geolocation.clearWatch(gelocationWatchId);
     window.addEventListener('devicemotion', getGyroscopSensorData, false);
 }
 
@@ -206,6 +215,8 @@ function lightChange(value) {
 }
 
 function lightClickListener() {
+
+    navigator.geolocation.clearWatch(gelocationWatchId);
 
     if (lightSensor)
         lightSensor.stop();;
@@ -242,6 +253,8 @@ function magSensorChange(magSensor) {
 }
 
 function magnetometerClickListener() {
+    navigator.geolocation.clearWatch(gelocationWatchId);
+
     if (magSensor)
         magSensor.stop();
 
@@ -295,6 +308,7 @@ function accelerometerChange() {
 }
 
 function accelerometerClickListener() {
+    navigator.geolocation.clearWatch(gelocationWatchId);
     if (lightSensor)
         lightSensor.stop();;
     window.removeEventListener('devicemotion', getGPSLocation, false);
@@ -307,19 +321,20 @@ function accelerometerClickListener() {
 
 
 function wifiChange() {
-    window.addEventListener('devicemotion',
-        function () {
+    navigator.connection.onChange = 
+        function (connection) {
             sensorData.name = 'Netzwerk';
             sensorData.xField = 'Type: ';
             sensorData.yField = 'Downlink: ';
             sensorData.zField = 'Rtt: ';
-            sensorData.x = navigator.connection.type;
-            sensorData.y = navigator.connection.downlink + ' Mbps';
-            sensorData.z = navigator.connection.rtt + ' ms';
-
-        }, false);
+            sensorData.x = connection.type;
+            sensorData.y = connection.downlink + ' Mbps';
+            sensorData.z = connection.rtt + ' ms';
+        }
+        ;
 }
 function wifiClickListener() {
+    navigator.geolocation.clearWatch(gelocationWatchId);
     if (lightSensor)
         lightSensor.stop();;
     wifiChange();
