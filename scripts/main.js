@@ -16,6 +16,8 @@ var lightSensor;
 var magSensor;
 var gelocationWatchId;
 
+var camerainput;
+
 function init() {
     console.log(window);
 
@@ -53,8 +55,12 @@ function getGravtitationSensor() {
     createSensorListItem('Gravitationssensor', false, null);
 }
 
+function cameraClickListener() {
+    camerainput.click();
+}
 function getCamera() {
-    createSensorListItem('Kamera', true, null);
+    camerainput = document.getElementById("camerainput");
+    createSensorListItem('Kamera', true, cameraClickListener);
 };
 
 function lineareAccelerometerChange() {
@@ -150,9 +156,9 @@ function loactionChange() {
         enableHighAccuracy: false,
         timeout: 5000,
         maximumAge: 0
-      };
+    };
     gelocationWatchId = navigator.geolocation.watchPosition(getGPSLocation, null, options);
-    
+
 }
 function loactionClickListener() {
     navigator.geolocation.clearWatch(gelocationWatchId);
@@ -321,7 +327,7 @@ function accelerometerClickListener() {
 
 
 function wifiChange() {
-    navigator.connection.onChange = 
+    navigator.connection.onChange =
         function (connection) {
             sensorData.name = 'Netzwerk';
             sensorData.xField = 'Type: ';
