@@ -19,7 +19,6 @@ var gelocationWatchId;
 var camerainput;
 
 function init() {
-    console.log(window);
 
     sensor_list_html = document.getElementsByClassName('sensor_list_html')[0];
     sensor_output = document.getElementsByClassName('sensor_output')[0];
@@ -47,6 +46,14 @@ function init() {
 
 }
 
+function fixTo(value, toFix) {
+    if (value) {
+        return value.toFixed(toFix);
+    } else {
+        return value;
+    }
+}
+
 function getRotationVector() {
     createSensorListItem('Drehvektor', false, null);
 }
@@ -64,7 +71,6 @@ function getCamera() {
 };
 
 function lineareAccelerometerChange() {
-    //console.log("getAccelerometerSensor");
 
     window.addEventListener('devicemotion', function (eventData) {
         // Acceleration
@@ -72,9 +78,9 @@ function lineareAccelerometerChange() {
         sensorData.xField = 'x: ';
         sensorData.yField = 'y: ';
         sensorData.zField = 'z: ';
-        sensorData.x = eventData.acceleration.x.toFixed(2) + ' m/s2';
-        sensorData.y = eventData.acceleration.y.toFixed(2) + ' m/s2';
-        sensorData.z = eventData.acceleration.z.toFixed(2) + ' m/s2';
+        sensorData.x = fixTo(eventData.acceleration.x, 2) + ' m/s2';
+        sensorData.y = fixTo(eventData.acceleration.y, 2) + ' m/s2';
+        sensorData.z = fixTo(eventData.acceleration.z, 2) + ' m/s2';
     }, false);
 }
 
@@ -106,7 +112,6 @@ function batteryChange() {
     window.addEventListener('devicemotion',
         function () {
             navigator.getBattery().then(data => {
-                console.log(data);
                 sensorData.name = 'Battery';
                 sensorData.xField = 'Level: ';
                 sensorData.yField = 'Charging: ';
@@ -137,7 +142,6 @@ function getBattery() {
 }
 
 function getGPSLocation(position) {
-    console.log(position);
     sensorData.name = 'Location';
     sensorData.xField = 'Latitude: ';
     sensorData.yField = 'Longitude: ';
@@ -179,14 +183,13 @@ function getLocationSensor() {
 
 
 function getGyroscopSensorData(eventData) {
-    console.log(eventData);
     sensorData.name = 'Gyroskop';
     sensorData.xField = 'x: ';
     sensorData.yField = 'y: ';
     sensorData.zField = 'z: ';
-    sensorData.x = eventData.rotationRate.beta.toFixed(2) + ' rad/s';;
-    sensorData.y = eventData.rotationRate.gamma.toFixed(2) + ' rad/s';;
-    sensorData.z = eventData.rotationRate.alpha.toFixed(2) + ' rad/s';;
+    sensorData.x = fixTo(eventData.rotationRate.beta, 2) + ' rad/s';;
+    sensorData.y = fixTo(eventData.rotationRate.gamma, 2) + ' rad/s';;
+    sensorData.z = fixTo(eventData.rotationRate.alpha, 2) + ' rad/s';;
 }
 function gyroscopChange() {
     navigator.geolocation.clearWatch(gelocationWatchId);
@@ -214,7 +217,7 @@ function lightChange(value) {
     sensorData.xField = 'Lichtstärke: ';
     sensorData.yField = null;
     sensorData.zField = null;
-    sensorData.x = value.toFixed(1) + 'lux';
+    sensorData.x = fixTo(value, 1) + 'lux';
     sensorData.y = null;
     sensorData.z = null;
 
@@ -253,16 +256,16 @@ function magSensorChange(magSensor) {
     sensorData.xField = 'x: ';
     sensorData.yField = 'y: ';
     sensorData.zField = 'z: ';
-    sensorData.x = magSensor.x.toFixed(2);
-    sensorData.y = magSensor.y.toFixed(2);
-    sensorData.z = magSensor.z.toFixed(2);
+    sensorData.x = fixTo(magSensor.x, 2);
+    sensorData.y = fixTo(magSensor.y, 2);
+    sensorData.z = fixTo(magSensor.z, 2);
 }
 
 function magnetometerClickListener() {
     navigator.geolocation.clearWatch(gelocationWatchId);
 
     if (magSensor)
-      magSensor.stop();
+        magSensor.stop();
 
     magSensor.onreading = () => {
         magSensorChange(magSensor);
@@ -305,9 +308,9 @@ function accelerometerChange() {
             sensorData.xField = 'x: ';
             sensorData.yField = 'y: ';
             sensorData.zField = 'z: ';
-            sensorData.x = eventData.accelerationIncludingGravity.x.toFixed(2) + ' m/s2';
-            sensorData.y = eventData.accelerationIncludingGravity.y.toFixed(2) + ' m/s2';
-            sensorData.z = eventData.accelerationIncludingGravity.z.toFixed(2) + ' m/s2';
+            sensorData.x = fixTo(eventData.accelerationIncludingGravity.x,2) + ' m/s2';
+            sensorData.y = fixTo(eventData.accelerationIncludingGravity.y,2) + ' m/s2';
+            sensorData.z = fixTo(eventData.accelerationIncludingGravity.z,2) + ' m/s2';
         }, false);
 }
 
