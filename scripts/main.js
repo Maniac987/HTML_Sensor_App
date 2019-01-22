@@ -160,8 +160,6 @@ function getGPSLocation(position) {
 }
 
 function loactionChange() {
-    // TODO umschrieben auf seperaten timer 
-    //window.addEventListener('devicemotion', getGPSLocation, false);
     var options = {
         enableHighAccuracy: false,
         timeout: 5000,
@@ -256,9 +254,9 @@ function magSensorChange(magSensor) {
     sensorData.xField = 'x: ';
     sensorData.yField = 'y: ';
     sensorData.zField = 'z: ';
-    sensorData.x = fixTo(magSensor.x, 2);
-    sensorData.y = fixTo(magSensor.y, 2);
-    sensorData.z = fixTo(magSensor.z, 2);
+    sensorData.x = fixTo(magSensor.x, 2) + 'μT';
+    sensorData.y = fixTo(magSensor.y, 2) + 'μT';
+    sensorData.z = fixTo(magSensor.z, 2) + 'μT';
 }
 
 function magnetometerClickListener() {
