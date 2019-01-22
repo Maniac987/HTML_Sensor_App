@@ -15,16 +15,8 @@ var sensorData = {
 var lightSensor;
 var magSensor;
 var gelocationWatchId;
+
 var camerainput;
-
-var sensorName_div = document.getElementById('sensor_name');
-var xField_div = document.getElementById('x_field');
-var yField_div = document.getElementById('y_field');
-var zField_div = document.getElementById('z_field');
-
-var xValue_div = document.getElementById('x_value');
-var yValue_div = document.getElementById('y_value');
-var zValue_div = document.getElementById('z_value');
 
 function init() {
     console.log(window);
@@ -270,7 +262,7 @@ function magnetometerClickListener() {
     navigator.geolocation.clearWatch(gelocationWatchId);
 
     if (magSensor)
-        magSensor.stop();
+      magSensor.stop();
 
     magSensor.onreading = () => {
         magSensorChange(magSensor);
@@ -391,6 +383,15 @@ function createSensorListItem(sensorName, availability, clickListener) {
 }
 
 function fillSensorOutput() {
+
+    var sensorName_div = document.getElementById('sensor_name');
+    var xField_div = document.getElementById('x_field');
+    var yField_div = document.getElementById('y_field');
+    var zField_div = document.getElementById('z_field');
+
+    var xValue_div = document.getElementById('x_value');
+    var yValue_div = document.getElementById('y_value');
+    var zValue_div = document.getElementById('z_value');
 
     sensorName_div.innerText = sensorData.name;
     xField_div.innerText = sensorData.xField;
