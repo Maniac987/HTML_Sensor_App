@@ -261,10 +261,9 @@ function magSensorChange(magSensor) {
 function magnetometerClickListener() {
     navigator.geolocation.clearWatch(gelocationWatchId);
 
-    if (magSensor)
-        magSensor.stop();
+    //if (magSensor)
+      //  magSensor.stop();
 
-    // Detect changes in the light
     magSensor.onreading = () => {
         magSensorChange(magSensor);
     }
@@ -276,7 +275,6 @@ function getMagnetSensor() {
     if (window.Magnetometer) {
 
         magSensor = new Magnetometer({ frequency: 1 });
-
         createSensorListItem('Magnetometer', true, magnetometerClickListener.bind(this));
     } else {
         createSensorListItem('Magnetometer', false, null);
