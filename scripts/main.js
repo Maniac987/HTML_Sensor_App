@@ -350,7 +350,7 @@ function wifiClickListener() {
 function getAccelerometerSensor() {
     if (window.DeviceMotionEvent) {
 
-        createSensorListItem('Accelerometer', true, accelerometerClickListener.bind(this));
+        createSensorListItem('Accelerometera', true, accelerometerClickListener.bind(this));
 
     } else {
         createSensorListItem('Accelerometer', false, null);
