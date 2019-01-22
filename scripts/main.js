@@ -275,7 +275,7 @@ function getMagnetSensor() {
     if (window.Magnetometer) {
 
         magSensor = new Magnetometer({ frequency: 1 });
-        createSensorListItem('Magnetometer', true, magnetometerClickListener.bind(this));
+        createSensorListItem('Magnetometera', true, magnetometerClickListener.bind(this));
     } else {
         createSensorListItem('Magnetometer', false, null);
     }
