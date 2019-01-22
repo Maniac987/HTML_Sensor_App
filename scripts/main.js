@@ -47,15 +47,14 @@ function init() {
 }
 
 function resetAllListener() {
-    if (lightSensor)
-        lightSensor.stop();
-
-    if (magSensor)
-        magSensor.stop();
+    
     navigator.geolocation.clearWatch(gelocationWatchId);
     window.removeEventListener('devicemotion', getGPSLocation, false);
     window.removeEventListener('devicemotion', getGyroscopSensorData, false);
     window.removeEventListener('devicemotion', getLineareAccelerometerData, false);
+    window.removeEventListener('devicemotion', getAccelerometerData, false);
+    window.removeEventListener('devicemotion', getLineareAccelerometerData, false);
+    window.removeEventListener('devicemotion', getBatteryData, false);
 
 }
 function fixTo(value, toFix) {
@@ -338,7 +337,7 @@ function wifiClickListener() {
 function getAccelerometerSensor() {
     if (window.DeviceMotionEvent) {
 
-        createSensorListItem('Accelerometera', true, accelerometerClickListener.bind(this));
+        createSensorListItem('Accelerometer', true, accelerometerClickListener.bind(this));
 
     } else {
         createSensorListItem('Accelerometer', false, null);
