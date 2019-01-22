@@ -47,7 +47,12 @@ function init() {
 }
 
 function resetAllListener() {
-    
+    if(magSensor){
+        magSensor.stop();
+    }
+    if(lightSensor){
+        lightSensor.stop();
+    }
     navigator.geolocation.clearWatch(gelocationWatchId);
     window.removeEventListener('devicemotion', getGPSLocation, false);
     window.removeEventListener('devicemotion', getGyroscopSensorData, false);
@@ -100,9 +105,6 @@ function lineareAccelerometerChange() {
 
 function lineareAccelerometerClickListener() {
     resetAllListener();
-    if (lightSensor)
-        lightSensor.stop();;
-
     lineareAccelerometerChange();
 }
 
