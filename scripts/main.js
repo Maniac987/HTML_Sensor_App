@@ -46,6 +46,18 @@ function init() {
 
 }
 
+function resetAllListener() {
+    if (lightSensor)
+        lightSensor.stop();
+
+    if (magSensor)
+        magSensor.stop();
+    navigator.geolocation.clearWatch(gelocationWatchId);
+    window.removeEventListener('devicemotion', getGPSLocation, false);
+    window.removeEventListener('devicemotion', getGyroscopSensorData, false);
+    window.removeEventListener('devicemotion', getLineareAccelerometerData, false);
+
+}
 function fixTo(value, toFix) {
     if (value) {
         return value.toFixed(toFix);
@@ -70,28 +82,27 @@ function getCamera() {
     createSensorListItem('Kamera', true, cameraClickListener);
 };
 
+function getLineareAccelerometerData(eventData) {
+    sensorData.name = 'Linare Beschleunigung';
+    sensorData.xField = 'x: ';
+    sensorData.yField = 'y: ';
+    sensorData.zField = 'z: ';
+    sensorData.x = fixTo(eventData.acceleration.x, 2) + ' m/s2';
+    sensorData.y = fixTo(eventData.acceleration.y, 2) + ' m/s2';
+    sensorData.z = fixTo(eventData.acceleration.z, 2) + ' m/s2';
+}
+
 function lineareAccelerometerChange() {
 
-    window.addEventListener('devicemotion', function (eventData) {
-        // Acceleration
-        sensorData.name = 'Linare Beschleunigung';
-        sensorData.xField = 'x: ';
-        sensorData.yField = 'y: ';
-        sensorData.zField = 'z: ';
-        sensorData.x = fixTo(eventData.acceleration.x, 2) + ' m/s2';
-        sensorData.y = fixTo(eventData.acceleration.y, 2) + ' m/s2';
-        sensorData.z = fixTo(eventData.acceleration.z, 2) + ' m/s2';
-    }, false);
+    window.addEventListener('devicemotion', getLineareAccelerometerData, false);
 }
 
 
 
 function lineareAccelerometerClickListener() {
-    navigator.geolocation.clearWatch(gelocationWatchId);
+    resetAllListener();
     if (lightSensor)
         lightSensor.stop();;
-    window.removeEventListener('devicemotion', getGPSLocation, false);
-    window.removeEventListener('devicemotion', getGyroscopSensorData, false);
 
     lineareAccelerometerChange();
 }
@@ -106,28 +117,23 @@ function getLineareAccelerometerSensor() {
     }
 }
 
+function getBatteryData() {
+    navigator.getBattery().then(data => {
+        sensorData.name = 'Battery';
+        sensorData.xField = 'Level: ';
+        sensorData.yField = 'Charging: ';
+        sensorData.zField = null;
+        sensorData.x = data.level * 100 + ' %';
+        sensorData.y = data.charging;
+        sensorData.z = null;
+    })
+}
 function batteryChange() {
-
-
-    window.addEventListener('devicemotion',
-        function () {
-            navigator.getBattery().then(data => {
-                sensorData.name = 'Battery';
-                sensorData.xField = 'Level: ';
-                sensorData.yField = 'Charging: ';
-                sensorData.zField = null;
-                sensorData.x = data.level * 100 + ' %';
-                sensorData.y = data.charging;
-                sensorData.z = null;
-            })
-        }, false);
+    window.addEventListener('devicemotion', getBatteryData, false);
 }
 
 function batteryClickListener() {
-    navigator.geolocation.clearWatch(gelocationWatchId);
-    if (lightSensor)
-        lightSensor.stop();;
-    window.removeEventListener('devicemotion', getGPSLocation, false);
+    resetAllListener();
     batteryChange();
 }
 
@@ -165,9 +171,7 @@ function loactionChange() {
 
 }
 function loactionClickListener() {
-    navigator.geolocation.clearWatch(gelocationWatchId);
-    if (lightSensor)
-        lightSensor.stop();;
+    resetAllListener();
     loactionChange();
 }
 
@@ -192,13 +196,12 @@ function getGyroscopSensorData(eventData) {
     sensorData.z = fixTo(eventData.rotationRate.alpha, 2) + ' rad/s';;
 }
 function gyroscopChange() {
-    navigator.geolocation.clearWatch(gelocationWatchId);
     window.addEventListener('devicemotion', getGyroscopSensorData, false);
+
 }
 
 function gyroscopClickListener() {
-    if (lightSensor)
-        lightSensor.stop();;
+    resetAllListener();
     gyroscopChange();
 }
 
@@ -225,10 +228,7 @@ function lightChange(value) {
 
 function lightClickListener() {
 
-    navigator.geolocation.clearWatch(gelocationWatchId);
-
-    if (lightSensor)
-        lightSensor.stop();;
+    resetAllListener();
     // Detect changes in the light
     lightSensor.onreading = () => {
         lightChange(lightSensor.illuminance);
@@ -262,11 +262,7 @@ function magSensorChange(magSensor) {
 }
 
 function magnetometerClickListener() {
-    navigator.geolocation.clearWatch(gelocationWatchId);
-
-    if (magSensor)
-        magSensor.stop();
-
+    resetAllListener();
     magSensor.onreading = () => {
         magSensorChange(magSensor);
     }
@@ -300,27 +296,21 @@ function getWifiSensor() {
     }
 }
 
-
+function getAccelerometerData(eventData) {
+    sensorData.name = 'Accelerometer';
+    sensorData.xField = 'x: ';
+    sensorData.yField = 'y: ';
+    sensorData.zField = 'z: ';
+    sensorData.x = fixTo(eventData.accelerationIncludingGravity.x, 2) + ' m/s2';
+    sensorData.y = fixTo(eventData.accelerationIncludingGravity.y, 2) + ' m/s2';
+    sensorData.z = fixTo(eventData.accelerationIncludingGravity.z, 2) + ' m/s2';
+}
 function accelerometerChange() {
-    window.addEventListener('devicemotion',
-        function (eventData) {
-            sensorData.name = 'Accelerometer';
-            sensorData.xField = 'x: ';
-            sensorData.yField = 'y: ';
-            sensorData.zField = 'z: ';
-            sensorData.x = fixTo(eventData.accelerationIncludingGravity.x,2) + ' m/s2';
-            sensorData.y = fixTo(eventData.accelerationIncludingGravity.y,2) + ' m/s2';
-            sensorData.z = fixTo(eventData.accelerationIncludingGravity.z,2) + ' m/s2';
-        }, false);
+    window.addEventListener('devicemotion', getAccelerometerData, false);
 }
 
 function accelerometerClickListener() {
-    navigator.geolocation.clearWatch(gelocationWatchId);
-    if (lightSensor)
-        lightSensor.stop();;
-    window.removeEventListener('devicemotion', getGPSLocation, false);
-    window.removeEventListener('devicemotion', getGyroscopSensorData, false);
-
+    resetAllListener();
     accelerometerChange();
 }
 
@@ -341,9 +331,7 @@ function wifiChange() {
         ;
 }
 function wifiClickListener() {
-    navigator.geolocation.clearWatch(gelocationWatchId);
-    if (lightSensor)
-        lightSensor.stop();;
+    resetAllListener();
     wifiChange();
 }
 
