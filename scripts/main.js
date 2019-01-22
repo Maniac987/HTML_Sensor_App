@@ -15,8 +15,16 @@ var sensorData = {
 var lightSensor;
 var magSensor;
 var gelocationWatchId;
-
 var camerainput;
+
+var sensorName_div = document.getElementById('sensor_name');
+var xField_div = document.getElementById('x_field');
+var yField_div = document.getElementById('y_field');
+var zField_div = document.getElementById('z_field');
+
+var xValue_div = document.getElementById('x_value');
+var yValue_div = document.getElementById('y_value');
+var zValue_div = document.getElementById('z_value');
 
 function init() {
     console.log(window);
@@ -214,7 +222,7 @@ function lightChange(value) {
     sensorData.xField = 'Lichtstärke: ';
     sensorData.yField = null;
     sensorData.zField = null;
-    sensorData.x = value + 'lux';
+    sensorData.x = value.toFixed(1) + 'lux';
     sensorData.y = null;
     sensorData.z = null;
 
@@ -253,16 +261,16 @@ function magSensorChange(magSensor) {
     sensorData.xField = 'x: ';
     sensorData.yField = 'y: ';
     sensorData.zField = 'z: ';
-    sensorData.x = magSensor.x;
-    sensorData.y = magSensor.y;
-    sensorData.z = magSensor.z;
+    sensorData.x = magSensor.x.toFixed(2);
+    sensorData.y = magSensor.y.toFixed(2);
+    sensorData.z = magSensor.z.toFixed(2);
 }
 
 function magnetometerClickListener() {
     navigator.geolocation.clearWatch(gelocationWatchId);
 
-    //if (magSensor)
-      //  magSensor.stop();
+    if (magSensor)
+        magSensor.stop();
 
     magSensor.onreading = () => {
         magSensorChange(magSensor);
@@ -275,7 +283,7 @@ function getMagnetSensor() {
     if (window.Magnetometer) {
 
         magSensor = new Magnetometer({ frequency: 1 });
-        createSensorListItem('Magnetometera', true, magnetometerClickListener.bind(this));
+        createSensorListItem('Magnetometer', true, magnetometerClickListener.bind(this));
     } else {
         createSensorListItem('Magnetometer', false, null);
     }
@@ -383,15 +391,6 @@ function createSensorListItem(sensorName, availability, clickListener) {
 }
 
 function fillSensorOutput() {
-
-    var sensorName_div = document.getElementById('sensor_name');
-    var xField_div = document.getElementById('x_field');
-    var yField_div = document.getElementById('y_field');
-    var zField_div = document.getElementById('z_field');
-
-    var xValue_div = document.getElementById('x_value');
-    var yValue_div = document.getElementById('y_value');
-    var zValue_div = document.getElementById('z_value');
 
     sensorName_div.innerText = sensorData.name;
     xField_div.innerText = sensorData.xField;
