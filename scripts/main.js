@@ -56,7 +56,6 @@ function resetAllListener() {
     navigator.geolocation.clearWatch(gelocationWatchId);
     window.removeEventListener('devicemotion', getGPSLocation, false);
     window.removeEventListener('devicemotion', getGyroscopSensorData, false);
-    window.removeEventListener('devicemotion', getLineareAccelerometerData, false);
     window.removeEventListener('devicemotion', getAccelerometerData, false);
     window.removeEventListener('devicemotion', getLineareAccelerometerData, false);
     window.removeEventListener('devicemotion', getBatteryData, false);
@@ -162,7 +161,7 @@ function getGPSLocation(position) {
 
 function loactionChange() {
     // TODO umschrieben auf seperaten timer 
-    window.addEventListener('devicemotion', getGPSLocation, false);
+    //window.addEventListener('devicemotion', getGPSLocation, false);
     var options = {
         enableHighAccuracy: false,
         timeout: 5000,
