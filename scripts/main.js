@@ -47,10 +47,10 @@ function init() {
 }
 
 function resetAllListener() {
-    if(magSensor){
+    if (magSensor) {
         magSensor.stop();
     }
-    if(lightSensor){
+    if (lightSensor) {
         lightSensor.stop();
     }
     navigator.geolocation.clearWatch(gelocationWatchId);
@@ -189,9 +189,9 @@ function getGyroscopSensorData(eventData) {
     sensorData.xField = 'x: ';
     sensorData.yField = 'y: ';
     sensorData.zField = 'z: ';
-    sensorData.x = fixTo(eventData.rotationRate.beta, 2) + ' rad/s';;
-    sensorData.y = fixTo(eventData.rotationRate.gamma, 2) + ' rad/s';;
-    sensorData.z = fixTo(eventData.rotationRate.alpha, 2) + ' rad/s';;
+    sensorData.x = fixTo(eventData.rotationRate.beta, 2) + '°/s';
+    sensorData.y = fixTo(eventData.rotationRate.gamma, 2) + '°/s';
+    sensorData.z = fixTo(eventData.rotationRate.alpha, 2) + '°/s';
 }
 function gyroscopChange() {
     window.addEventListener('devicemotion', getGyroscopSensorData, false);
